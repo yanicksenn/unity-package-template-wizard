@@ -68,13 +68,17 @@ confirm() {
   esac
 }
 
+err() {
+    echo "E: $*" >>/dev/stderr
+}
+
 check_command_exists() {
   local command=$1
 
   if ! command -v "$command" &> /dev/null;
   then
-      echo "$command does not exist"
-      exit
+      err "$command does not exist"
+      exit 1
   fi
 }
 
@@ -83,7 +87,7 @@ check_command_exists "git"
 repository="https://github.com/yanicksenn/unity-package-template.git"
 
 # Read user inputs and store
-final_unity_version="$(read_requirement_from_input "Unity Version" "2021.2.12f1")"
+final_unity_version="$(read_requirement_from_input "Unity-Version" "2021.2.12f1")"
 final_name="$(read_requirement_from_input "Name")"
 final_version="$(read_requirement_from_input "Version" "1.0.0")"
 final_display_name="$(read_requirement_from_input "Display Name" "$final_name")"
@@ -93,7 +97,7 @@ final_author_email="$(read_from_input "Author Email")"
 final_assembly_name="$(read_requirement_from_input "Assembly Name" "$final_name")"
 final_assembly_namespace="$(read_requirement_from_input "Assembly Namespace" "$final_name")"
 
-package_path="./$final_name"
+package_path="$(pwd)/$final_name"
 
 # Generated runtime assembly name and namespace
 final_runtime_assembly_name="$final_assembly_name"
@@ -131,10 +135,27 @@ template_test_editor_assembly="$package_path/Tests/Editor/__TODO_TEST_ASSEMBLY_E
 final_editor_assembly="$package_path/Editor/$final_editor_assembly_name.asmdef"
 final_test_editor_assembly="$package_path/Tests/Editor/$final_test_editor_assembly_name.asmdef"
 
-confirm "Continue with setup?"
+# Show user the package-path for verification before starting the setup.
+echo
+echo "Empty package will be created at:"
+echo "  $package_path"
+echo
+
+# Check if user actually wants to continue with the setup.
+if ! confirm "Continue with setup?" ;
+then
+  err "Setup aborted."
+  exit 2
+fi
 
 # Clone last "layer" of repository and the rempove the contained .git folder
 git clone -b "$final_unity_version" --single-branch --depth=1 "$repository" "$final_name"
+if [ "$?" != "0" ];
+then
+  err "Unity version $final_unity_version is not yet supported."
+  exit 3
+fi
+
 rm -rf "$final_name/.git"
 
 # All files containing placeholders

@@ -2,28 +2,33 @@
 
 This simple wizard prepares an empty unity package according to your preferences.
 
+## Requirements
+
+- `git` installation
+- Able to clone repositories from GitHub
+
 ## Usage
 
 Clone this repository into your project and run `setup.sh` to start the wizard.
 
 ```
 $ ./setup.sh
-Unity Version (2021.2.12f1):
-Name: com.mycompany.mypackage
+Unity-Version (2021.2.12f1):
+Name: MyPackage
 Version: 1.0.0
-Display Name: My Package
-Description: This is the description to my package.
+Display Name (MyPackage): My Package
+Description (MyPackage): This is the description to my package.
 Author Name: John Doe
 Author Email: info@johndoe.com
-Assembly Name: MyPackage
-Assembly Namespace: MyPackage.Core
+Assembly Name (MyPackage): MyPackage
+Assembly Namespace (MyPackage): MyPackage.Core
 Continue with setup? [y/N]: y
 ```
 
 Afterwards you should find the files in the following structure:
 
 ```
-com.mycompany.mypackage
+MyPackage
   |
   |--- Runtime
   |  |--- MyPackage.asmdef
@@ -42,8 +47,7 @@ com.mycompany.mypackage
   |--- README.md
 ```
 
-I recommend initializing a git repository inside the newly created package folder afterwards.
-You can store and distribute through a public git repository.
+I recommend initialising a local git repository inside the newly created package folder and pushing it to a public repository which will allow you to distribute your package through the internet.
 
 ## References
 
