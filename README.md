@@ -4,7 +4,8 @@ This simple wizard prepares an empty unity package according to your preferences
 
 ## Requirements
 
-- `git` installation
+- `bash`
+- `git`
 - Able to clone repositories from GitHub
 
 ## Usage
