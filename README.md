@@ -10,10 +10,10 @@ This simple wizard prepares an empty unity package according to your preferences
 
 ## Usage
 
-Clone this repository into your project and run `setup.sh` to start the wizard.
+Clone this repository and run the `setup.sh` in the `Assets` folder inside of your unity project to start the wizard.
 
 ```
-$ ./setup.sh
+Assets $ ./unity-package-wizard/setup.sh
 Unity Package Wizard (1.0.0)
 
 Name: MyPackage
@@ -56,9 +56,16 @@ Notice that the editor as well as the test assemblies are created according to t
   |--- README.md
 ```
 
-I recommend initialising a local git repository inside the newly created package folder and pushing it to a public repository.
-Thus allowing you to import your package by simply passing the git url into the unity package manager.
+To ensure that your package stays clean I recommend ...
+1. ... creating a separate unity project specifically for your package. This allows you to be sure that all script dependencies are met and that you do not have any compilation errors when when sharing it.
+1. ... initialising a local git repository inside of the newly created package folder and pushing it to a "public" repository. This allows you to simply depend on your package by passing the git url inside of you unity package manager.
 
+
+Also keep in mind that you do not have to clone this repository into your unity project.
+
+```
+Assets $ ./Users/myself/Documents/somewhere/unity-package-wizard/setup.sh
+```
 ## References
 
 - [Unity Package Layout](https://docs.unity3d.com/Manual/cus-layout.html)
