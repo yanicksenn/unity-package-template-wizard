@@ -30,10 +30,11 @@ Empty package will be created at:
 Continue with setup? [y/N]: y
 ```
 
-Afterwards you should find the files in the following structure:
+This will create the following folders and files.
+Notice that the editor as well as the test assemblies are created according to the [Unity Package Layout](https://docs.unity3d.com/Manual/cus-layout.html).
 
 ```
-MyPackage
+./MyPackage
   |
   |--- Runtime
   |  |--- MyPackage.asmdef
@@ -52,7 +53,8 @@ MyPackage
   |--- README.md
 ```
 
-I recommend initialising a local git repository inside the newly created package folder and pushing it to a public repository which will allow you to distribute your package through the internet.
+I recommend initialising a local git repository inside the newly created package folder and pushing it to a public repository.
+Thus allowing you to import your package by simply passing the git url into the unity package manager.
 
 ## References
 
