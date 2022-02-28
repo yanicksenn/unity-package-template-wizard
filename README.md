@@ -61,11 +61,12 @@ To ensure that your package stays clean I recommend ...
 - ... initialising a local git repository inside of the newly created package folder and pushing it to a "public" repository. This allows you to simply depend on your package by passing the git url inside of you unity package manager.
 
 
-Also keep in mind that you do not have to clone this repository into your unity project.
+Also keep in mind that you do not have to directly clone this repository into your unity project.
 
 ```
 Assets $ ./Users/myself/Documents/somewhere/unity-package-wizard/setup.sh
 ```
+
 ## References
 
 - [Unity Package Layout](https://docs.unity3d.com/Manual/cus-layout.html)
