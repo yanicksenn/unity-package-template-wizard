@@ -14,11 +14,14 @@ Clone this repository into your project and run `setup.sh` to start the wizard.
 
 ```
 $ ./setup.sh
-Unity-Version (2021.2.12f1):
+Unity Package Wizard (1.0.0)
+
 Name: MyPackage
 Version: 1.0.0
 Display Name (MyPackage): My Package
 Description (MyPackage): This is the description to my package.
+Unity (2020.3): 2021.2
+Unity Release (30f1): 12f1
 Author Name: John Doe
 Author Email: info@johndoe.com
 Assembly Name (MyPackage): MyPackage
