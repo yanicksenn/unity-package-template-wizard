@@ -23,6 +23,10 @@ Author Name: John Doe
 Author Email: info@johndoe.com
 Assembly Name (MyPackage): MyPackage
 Assembly Namespace (MyPackage): MyPackage.Core
+
+Empty package will be created at:
+  /Users/myself/Documents/MyUnityProject/Assets/MyPackage
+
 Continue with setup? [y/N]: y
 ```
 

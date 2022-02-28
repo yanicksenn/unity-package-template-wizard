@@ -78,11 +78,24 @@ check_command_exists() {
   if ! command -v "$command" &> /dev/null;
   then
       err "$command does not exist"
-      exit 1
+      exit 2
   fi
 }
 
-check_command_exists "git"
+clone_depth1_single_branch_then_prune() {
+  local repository_url=$1
+  local repostiory_branch=$2
+  local clone_path=$3
+
+  git clone -b "$repostiory_branch" --single-branch --depth=1 "$repository_url" "$clone_path"
+  if [ "$?" != "0" ];
+  then
+    err "Cannot find branch $repostiory_branch"
+    exit 3
+  fi
+
+  rm -rf "$clone_path/.git"
+}
 
 repository="https://github.com/yanicksenn/unity-package-template.git"
 
@@ -137,7 +150,7 @@ final_test_editor_assembly="$package_path/Tests/Editor/$final_test_editor_assemb
 
 # Show user the package-path for verification before starting the setup.
 echo
-echo "Empty package will be created at:"
+echo "Empty package $final_name will be created at:"
 echo "  $package_path"
 echo
 
@@ -145,18 +158,14 @@ echo
 if ! confirm "Continue with setup?" ;
 then
   err "Setup aborted."
-  exit 2
+  exit 1
 fi
+
+# Check if command(s) exist
+check_command_exists "git"
 
 # Clone last "layer" of repository and the rempove the contained .git folder
-git clone -b "$final_unity_version" --single-branch --depth=1 "$repository" "$final_name"
-if [ "$?" != "0" ];
-then
-  err "Unity version $final_unity_version is not yet supported."
-  exit 3
-fi
-
-rm -rf "$final_name/.git"
+clone_depth1_single_branch_then_prune "$repository" "$final_unity_version" "$package_path"
 
 # All files containing placeholders
 files=( \
