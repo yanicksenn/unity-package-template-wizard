@@ -57,8 +57,8 @@ Notice that the editor as well as the test assemblies are created according to t
 ```
 
 To ensure that your package stays clean I recommend ...
-1. ... creating a separate unity project specifically for your package. This allows you to be sure that all script dependencies are met and that you do not have any compilation errors when when sharing it.
-1. ... initialising a local git repository inside of the newly created package folder and pushing it to a "public" repository. This allows you to simply depend on your package by passing the git url inside of you unity package manager.
+- ... creating a separate unity project specifically for your package. This allows you to be sure that all script dependencies are met and that you do not have any compilation errors when when sharing it.
+- ... initialising a local git repository inside of the newly created package folder and pushing it to a "public" repository. This allows you to simply depend on your package by passing the git url inside of you unity package manager.
 
 
 Also keep in mind that you do not have to clone this repository into your unity project.
