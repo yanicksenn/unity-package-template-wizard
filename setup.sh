@@ -82,35 +82,61 @@ check_command_exists() {
   fi
 }
 
-clone_depth1_single_branch_then_prune() {
+clone_depth1_single_branch() {
   local repository_url=$1
-  local repostiory_branch=$2
-  local clone_path=$3
+  local clone_path=$2
+  local branch_specific=$3
 
-  git clone -b "$repostiory_branch" --single-branch --depth=1 "$repository_url" "$clone_path"
+  git clone -b "$branch_specific" --single-branch --depth=1 "$repository_url" "$clone_path" &> /dev/null
+}
+
+clone_branch_with_fallback_then_prune() {
+  local repository_url=$1
+  local clone_path=$2
+  local branch_specific=$3
+  local branch_fallback=$4
+
+  # Try cloning specific branch
+  clone_depth1_single_branch "$repository_url" "$clone_path" "$branch_specific"
+
   if [ "$?" != "0" ];
   then
-    err "Cannot find branch $repostiory_branch"
-    exit 3
+    err "Cannot find branch $branch_specific"
+
+    # Fallback to main branch
+    clone_depth1_single_branch "$repository_url" "$clone_path" "$branch_fallback"
+    if [ "$?" != "0" ];
+    then
+      err "Cannot find branch $branch_fallback"
+      exit 3
+    fi
   fi
 
   rm -rf "$clone_path/.git"
 }
 
-repository="https://github.com/yanicksenn/unity-package-template.git"
+wizard_version="1.0.0"
+
+# Pint header to identify version
+echo "Unity Package Wizard ($wizard_version)"
+echo
 
 # Read user inputs and store
-final_unity_version="$(read_requirement_from_input "Unity-Version" "2021.2.12f1")"
 final_name="$(read_requirement_from_input "Name")"
 final_version="$(read_requirement_from_input "Version" "1.0.0")"
 final_display_name="$(read_requirement_from_input "Display Name" "$final_name")"
 final_description="$(read_from_input "Description" "$final_name")"
+final_unity="$(read_requirement_from_input "Unity" "2020.3")"
+final_unity_release="$(read_requirement_from_input "Unity Release" "30f1")"
 final_author_name="$(read_from_input "Author Name")"
 final_author_email="$(read_from_input "Author Email")"
 final_assembly_name="$(read_requirement_from_input "Assembly Name" "$final_name")"
 final_assembly_namespace="$(read_requirement_from_input "Assembly Namespace" "$final_name")"
 
+repository="https://github.com/yanicksenn/unity-package-template.git"
+
 package_path="$(pwd)/$final_name"
+unity_version="$final_unity.$final_unity_release"
 
 # Generated runtime assembly name and namespace
 final_runtime_assembly_name="$final_assembly_name"
@@ -164,8 +190,9 @@ fi
 # Check if command(s) exist
 check_command_exists "git"
 
-# Clone last "layer" of repository and the rempove the contained .git folder
-clone_depth1_single_branch_then_prune "$repository" "$final_unity_version" "$package_path"
+# Clone template for specific unity version and remove the contained .git folder
+# Fallback to main branch if no specific version was found
+clone_branch_with_fallback_then_prune "$repository" "$package_path" "$unity_version" "main"
 
 # All files containing placeholders
 files=( \
@@ -181,6 +208,8 @@ replace_in_files "__TODO_NAME__" "$final_name" "${files[@]}"
 replace_in_files "__TODO_VERSION__" "$final_version" "${files[@]}"
 replace_in_files "__TODO_DISPLAY_NAME__" "$final_display_name" "${files[@]}"
 replace_in_files "__TODO_DESCRIPTION__" "$final_description" "${files[@]}"
+replace_in_files "__TODO_UNITY__" "$final_unity" "${files[@]}"
+replace_in_files "__TODO_UNITY_RELEASE__" "$final_unity_release" "${files[@]}"
 replace_in_files "__TODO_AUTHOR_NAME__" "$final_author_name" "${files[@]}"
 replace_in_files "__TODO_AUTHOR_EMAIL__" "$final_author_email" "${files[@]}"
 replace_in_files "__TODO_ASSEMBLY_NAME__" "$final_runtime_assembly_name" "${files[@]}"
