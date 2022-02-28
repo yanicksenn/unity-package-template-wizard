@@ -113,6 +113,7 @@ clone_branch_with_fallback_then_prune() {
   fi
 
   rm -rf "$clone_path/.git"
+  rm -rf "$clone_path/.gitignore"
 }
 
 wizard_version="1.0.0"
